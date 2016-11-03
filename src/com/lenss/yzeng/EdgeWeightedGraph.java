@@ -73,7 +73,15 @@ public class EdgeWeightedGraph {
     private Bag<Edge>[] adj;
     private ArrayList<Edge> sortedEdges;
     
-    /**
+    public ArrayList<Edge> getSortedEdges() {
+		return sortedEdges;
+	}
+
+	public void setSortedEdges(ArrayList<Edge> sortedEdges) {
+		this.sortedEdges = sortedEdges;
+	}
+
+	/**
      * Initializes an empty edge-weighted graph with {@code V} vertices and 0 edges.
      *
      * @param  V the number of vertices
