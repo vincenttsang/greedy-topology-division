@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import edu.princeton.cs.algs4.Bag;
-import edu.princeton.cs.algs4.Edge;
+import com.lenss.yzeng.Edge;;
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.QuickX;
 import edu.princeton.cs.algs4.Stack;
