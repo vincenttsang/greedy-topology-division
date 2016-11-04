@@ -3,6 +3,7 @@ package com.lenss.yzeng;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import com.lenss.yzeng.graph.Graph;
+import com.lenss.yzeng.graph.TopoGraph;
 
 public class GreedyDivider {
 	public static void main(String[] args){
@@ -11,7 +12,7 @@ public class GreedyDivider {
 		//2. one vertex on the edge exits
 		//3. two vertex exist
 		try {
-			Graph graph = Graph.graphInit("test-no-merge.txt");
+			TopoGraph graph = TopoGraph.graphInit("test-no-merge.txt");
 			int[] deviceCapacity = {3, 3, 3};
 			ArrayList<ArrayList<Integer>> allocationMap =  graph.greedyEdgeDivide(deviceCapacity);
 			printAllocationMap(allocationMap);
