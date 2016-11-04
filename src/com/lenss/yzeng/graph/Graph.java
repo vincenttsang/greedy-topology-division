@@ -116,6 +116,7 @@ public class Graph {
 		//allocate the first topo node to the largest capacity device
 		perDevAllocation = new ArrayList<Integer>();
 		perDevAllocation.add(node.getValue().getV());
+		perDevAllocation.add(node.getValue().getW());
 		allocationMap.add(perDevAllocation);
 		//cumulatively add whenever a device is filled
 		int allocatedCount = 0;
@@ -131,7 +132,7 @@ public class Graph {
 			//TODO
 			//deal with allocated node sets
 			//step out if all allocated devices have been detected or all vertices in the edge is tested
-			for (int i = 0; i < allocatedCount && unallocated.size() != 0; i++) {
+			for (int i = 0; i < allocatedCount && !unallocated.isEmpty(); i++) {
 				//get one currently allocated device
 				perDevAllocation = allocationMap.get(i);
 				
@@ -162,7 +163,7 @@ public class Graph {
 			//TODO deal with 1 or 0 nodes in this edge exist in the allocated
 			//1 node is already allocated
 			else if (unallocated.size() == 1) {
-				for (int i = allocatedCount; i < allocationMap.size(); i++) {
+				for (int i = allocatedCount; i < allocationMap.size() && !unallocated.isEmpty(); i++) {
 					if (allocationMap.get(i).contains(unallocated.get(0))) {
 						unallocated.remove(0);
 					}
