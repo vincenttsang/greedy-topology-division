@@ -103,6 +103,7 @@ public class Graph {
 				perDevAllocation.add(i);
 				allocationMap.add(perDevAllocation);
 			}
+			return allocationMap;
 		}
 		
 		//if there is no valid node on the edge list
@@ -129,16 +130,31 @@ public class Graph {
 			unallocated.add(node.getValue().getW());
 			//TODO
 			//deal with allocated node sets
+			//step out if all allocated devices have been detected or all vertices in the edge is tested
 			for (int i = 0; i < allocatedCount && unallocated.size() != 0; i++) {
+				//get one currently allocated device
 				perDevAllocation = allocationMap.get(i);
-				for (int j = 0; j < deviceCapacity[i]; j++) {
-					int perNode = perDevAllocation.get(j);
-					for (int k = 0; k < unallocated.size(); k++) {
-						if (unallocated.get(k) == perNode) {
-							unallocated.remove(k);
-						}
+				
+				//reconstructed
+				//iterate all vertices on current edge that are unallocated and see if they are contained
+				//in all allocated devices
+				for (int j = 0; j < unallocated.size(); j++) {
+					if (perDevAllocation.contains(unallocated.get(j))) {
+						unallocated.remove(j);
+						break;
 					}
 				}
+				//obsolete
+//				//iterate all allocated vertices on the device
+//				for (int j = 0; j < deviceCapacity[i]; j++) {
+//					int perNode = perDevAllocation.get(j);
+//					//iterate all undetected vertices on current edge
+//					for (int k = 0; k < unallocated.size(); k++) {
+//						if (unallocated.get(k) == perNode) {
+//							unallocated.remove(k);
+//						}
+//					}
+//				}
 			}
 			//which means all nodes in this edge is already allocated
 			if (unallocated.isEmpty())
@@ -156,32 +172,65 @@ public class Graph {
 					perDevAllocation = new ArrayList<Integer>();
 					perDevAllocation.add(unallocated.get(0));
 					allocationMap.add(perDevAllocation);
+					//check if can be allocated to the largest device
+					if (perDevAllocation.size() == deviceCapacity[allocatedCount]) {
+						allocatedCount ++;
+					}
 				}
 				//1 in allocated, 1 in allocating, do nothing
 			}
 			//0 node is allocated
 			else {
+				//0, 1, 2 nodes are being allocated
+				//int lastAllocatingIndex = -1;
 				ArrayList<Integer> mapIndex = new ArrayList<Integer>();
 				for (int i = allocatedCount; i < allocationMap.size(); i++) {
 					perDevAllocation = allocationMap.get(i);
+					//for every allocating device, check if unallocated vertices on the current edge is allocating
 					for (int j = 0; j < unallocated.size(); j++) {
 						if (perDevAllocation.contains(unallocated.get(j))) {
 							unallocated.remove(j);
+							//record the device we want to assign task on
+//							if (lastAllocatingIndex == -1) {
+//								lastAllocatingIndex = i;
+//							}
 							mapIndex.add(i);
 						}
 					}
 				}
 				if (unallocated.size() == 2) {
 					perDevAllocation = new ArrayList<Integer>();
-					//TODO what if there is only one device
-					perDevAllocation.add(unallocated.get(0));
-					perDevAllocation.add(unallocated.get(1));
+					int devRemainingSize = deviceCapacity[allocatedCount] - perDevAllocation.size();
+					//TODO test if the device can be added by 2 tasks
+					if (devRemainingSize >= 2) {
+						perDevAllocation.add(unallocated.get(0));
+						perDevAllocation.add(unallocated.get(1));
+						//test if device can be added 2
+						
+						allocationMap.add(perDevAllocation);
+						//if equal 2, assign
+						if (devRemainingSize == 2) {
+							allocatedCount ++;
+						}
+					}
+					//if not, split those tasks on two devices
+					else {
+						perDevAllocation.add(unallocated.get(0));
+						allocationMap.add(perDevAllocation);
+						perDevAllocation = new ArrayList<Integer>();
+						perDevAllocation.add(unallocated.get(1));
+						allocationMap.add(perDevAllocation);
+					}
 					unallocated.clear();
 				}
 				else if (unallocated.size() == 1) {
 					int index = mapIndex.get(0);
 					perDevAllocation = allocationMap.get(index);
 					perDevAllocation.add(unallocated.get(0));
+					if (perDevAllocation.size() == deviceCapacity[allocatedCount]) {
+						allocatedCount ++;
+					}
+					unallocated.clear();
 				}
 				//two nodes are allocating, try merge
 				else {

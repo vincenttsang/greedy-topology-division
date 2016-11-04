@@ -1,40 +1,34 @@
 package com.lenss.yzeng;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
-
-import org.omg.PortableServer.ServantActivator;
-
-import com.lenss.yzeng.graph.Edge;
-import com.lenss.yzeng.graph.Edge.EDGE_CONN;
-
-import edu.princeton.cs.algs4.Bag;
-import edu.princeton.cs.algs4.Quick;
-import edu.princeton.cs.algs4.QuickX;
+import com.lenss.yzeng.graph.Graph;
 
 public class GreedyDivider {
-	public GreedyDivider() {
-		// TODO Auto-generated constructor stub
-	}
-	
-	public EdgeWeightedGraph[] greedyDivide(int [] sortedExecutor, EdgeWeightedGraph graph){
-		//Quick.sort(a);
-		if (sortedExecutor.length < graph.E()) {
-			return null;
-		}
-		ArrayList<Edge> sortedEdges = graph.getSortedEdges();
-		Bag<Edge>[] subTopo = (Bag<Edge>[]) new Bag[sortedExecutor.length];
-		for (int i = 0; i < sortedEdges.size(); i++) {
-			
-		}
-	}
-	
-	public static void addEdgeToTopo(Bag<Edge>[] subTopo, Edge edge, int maxExecutor){
+	public static void main(String[] args){
 		//3 cases:
 		//1. no vertex on the edge exits in current bags
 		//2. one vertex on the edge exits
 		//3. two vertex exist
+		try {
+			Graph graph = Graph.graphInit("test-no-merge.txt");
+			int[] deviceCapacity = {3, 3, 3};
+			ArrayList<ArrayList<Integer>> allocationMap =  graph.greedyEdgeDivide(deviceCapacity);
+			printAllocationMap(allocationMap);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
+	}
+	
+	public static void printAllocationMap(ArrayList<ArrayList<Integer>> allocationMap){
+		for (int i = 0; i < allocationMap.size(); i++) {
+			System.out.print("Device " + i + ": ");
+			for (Integer node : allocationMap.get(i)) {
+				System.out.print(node + " ");
+			}
+			System.out.print("\n");
+		}
 	}
 }
