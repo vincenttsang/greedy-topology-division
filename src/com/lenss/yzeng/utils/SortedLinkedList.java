@@ -45,6 +45,14 @@ public class SortedLinkedList<T extends Sortable>{
 		}
 		System.out.print(current.getValue().getKey());
 	}
+
+	public DLNode<T> getStart() {
+		return start;
+	}
+
+	public void setStart(DLNode<T> start) {
+		this.start = start;
+	}
 }
 
 
