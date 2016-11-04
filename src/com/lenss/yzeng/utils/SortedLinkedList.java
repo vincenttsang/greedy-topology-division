@@ -1,61 +1,49 @@
 package com.lenss.yzeng.utils;
 
 public class SortedLinkedList<T extends Sortable>{
-	T value;
-
-	SortedLinkedList<T> next;
-	SortedLinkedList<T> parent;
+	DLNode<T> start;
 	
-	public SortedLinkedList(T value) {
+	public SortedLinkedList(T element) {
 		// TODO Auto-generated constructor stub
-		this.value = value;
-		next = null;
-		parent = null;
+		this.start = new DLNode<T>(element);
 	}
 	
-	public void ascendingInsert(T element){
-		SortedLinkedList<T> current = this;
-		SortedLinkedList<T> parent = null;
-		
-		//if it is bigger than the root node
-		if (current.getValue().getKey() < element.getKey()) {
-			SortedLinkedList<T> tempParent = current.getParent();
-			SortedLinkedList<T> tempNext = current.getNext();
-			
-			SortedLinkedList<Sortable>
-			current.parent = element;
+	public void descendingInsert(T element){
+		//if the start node is smaller than the node to insert
+		DLNode<T> current = this.start;
+		DLNode<T> newNode;
+		int elementKey = element.getKey();
+		if (current.getValue().getKey() < elementKey) {
+			//
+			newNode = new DLNode<T>(element, current);
+			current.setParent(newNode);
+			this.start = newNode;
+			return;
 		}
-		
-		while (current != null) {
-			if (current.getValue().getKey() < element.getKey()) {
-				
+		//else, traverse the list
+		do {
+			current = current.getNext();
+			if (current.getValue().getKey() < elementKey) {
+				DLNode<T> parent = current.getParent();
+				newNode = new DLNode<T>(parent, element, current);
+				parent.setNext(newNode);
+				current.setParent(newNode);
+				return;
 			}
-			parent = current
+		} while (current.hasNext());
+		
+		newNode = new DLNode<T>(current, element);
+		current.setNext(newNode);
+		return;
+	}
+
+	public void print(){
+		DLNode<T> current = this.start;
+		while (current.hasNext()) {
+			System.out.print(current.getValue().getKey() + "->");
+			current = current.getNext();
 		}
-	}
-
-	public T getValue() {
-		return value;
-	}
-
-	public void setValue(T value) {
-		this.value = value;
-	}
-	
-	public void setParent(SortedLinkedList<T> parent){
-		this.parent = parent;
-	}
-	
-	public void setNext(SortedLinkedList<T> next){
-		this.next = next;
-	}
-	
-	public SortedLinkedList<T> getNext() {
-		return next;
-	}
-
-	public SortedLinkedList<T> getParent() {
-		return parent;
+		System.out.print(current.getValue().getKey());
 	}
 }
 

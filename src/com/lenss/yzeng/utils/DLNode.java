@@ -5,12 +5,29 @@ public class DLNode <T extends Sortable> {
 	private DLNode<T> next;
 	private T value;
 	
+	//get a node that is in the middle of doubly linked list
 	public DLNode(DLNode<T> parent, T value, DLNode<T> next) {
+		this(value);
 		this.parent = parent;
 		this.next = next;
-		this.value = value;
 	}
 	
+	//get a node that is in the head of the list
+	public DLNode(T value, DLNode<T> next) {
+		// TODO Auto-generated constructor stub
+		this(value);
+		this.parent = null;
+		this.next = next;
+	}
+	
+	//get a node that is in the tail of the list
+	public DLNode(DLNode<T> parent, T value){
+		this(value);
+		this.parent = parent;
+		this.next = null;
+	}
+	
+	//get a basic node(just value, no parent and next)
 	public DLNode(T value){
 		this.parent = null;
 		this.next = null;
@@ -39,5 +56,9 @@ public class DLNode <T extends Sortable> {
 
 	public void setValue(T value) {
 		this.value = value;
+	}
+	
+	public boolean hasNext(){
+		return (this.next == null ? false : true);
 	}
 }
