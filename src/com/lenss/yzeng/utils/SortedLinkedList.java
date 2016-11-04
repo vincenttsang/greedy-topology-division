@@ -12,7 +12,7 @@ public class SortedLinkedList<T extends Sortable>{
 		//if the start node is smaller than the node to insert
 		DLNode<T> current = this.start;
 		DLNode<T> newNode;
-		int elementKey = element.getKey();
+		double elementKey = element.getKey();
 		if (current.getValue().getKey() < elementKey) {
 			//
 			newNode = new DLNode<T>(element, current);
@@ -21,7 +21,7 @@ public class SortedLinkedList<T extends Sortable>{
 			return;
 		}
 		//else, traverse the list
-		do {
+		while (current.hasNext()) {
 			current = current.getNext();
 			if (current.getValue().getKey() < elementKey) {
 				DLNode<T> parent = current.getParent();
@@ -30,7 +30,7 @@ public class SortedLinkedList<T extends Sortable>{
 				current.setParent(newNode);
 				return;
 			}
-		} while (current.hasNext());
+		} 
 		
 		newNode = new DLNode<T>(current, element);
 		current.setNext(newNode);

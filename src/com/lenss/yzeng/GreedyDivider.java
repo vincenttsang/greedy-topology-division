@@ -6,10 +6,10 @@ import java.util.Map;
 
 import org.omg.PortableServer.ServantActivator;
 
-import edu.princeton.cs.algs4.Bag;
-import com.lenss.yzeng.Edge;
-import com.lenss.yzeng.Edge.EDGE_CONN;
+import com.lenss.yzeng.graph.Edge;
+import com.lenss.yzeng.graph.Edge.EDGE_CONN;
 
+import edu.princeton.cs.algs4.Bag;
 import edu.princeton.cs.algs4.Quick;
 import edu.princeton.cs.algs4.QuickX;
 

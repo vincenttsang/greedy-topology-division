@@ -3,15 +3,15 @@ package com.lenss.yzeng.utils;
 import java.util.Random;
 
 class MyInt implements Sortable{
-	private int key;
+	private double key;
 	
-	public MyInt(int key) {
+	public MyInt(double key) {
 		// TODO Auto-generated constructor stub
 		this.key = key;
 	}
 	
 	@Override
-	public int getKey() {
+	public double getKey() {
 		// TODO Auto-generated method stub
 		return this.key;
 	}
