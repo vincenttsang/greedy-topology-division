@@ -235,11 +235,29 @@ public class Graph {
 				}
 				//two nodes are allocating, try merge
 				else {
-					
+					//TODO insert node into allocation in connectivity order
+					//2 cases: after merge we got a larger set than the largest device capa
+					//after merge we got a equal or smaller set than the largest dev capa
+					//we decided not to merge here since it might cause detrimental effects
 				}
 			}
 		}
 		
+		//only do merge if the allocationMap is larger than device count
+		while (allocationMap.size() > deviceCapacity.length) {
+			int lastAllocIndex = allocationMap.size() - 1;
+			ArrayList<Integer> oneDevAllocation = allocationMap.get(lastAllocIndex);
+			while (!oneDevAllocation.isEmpty()) {
+				perDevAllocation = allocationMap.get(allocatedCount);
+				int splitNode = oneDevAllocation.get(0);
+				oneDevAllocation.remove(0);
+				perDevAllocation.add(splitNode);
+				if (perDevAllocation.size() == deviceCapacity[allocatedCount]) {
+					allocatedCount ++;
+				}
+			}
+			allocationMap.remove(lastAllocIndex);
+		}
 		return allocationMap;
 	}
 	
