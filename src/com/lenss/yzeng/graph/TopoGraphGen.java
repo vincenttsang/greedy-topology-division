@@ -7,14 +7,16 @@ import java.util.Random;
 
 public class TopoGraphGen {
 	public static void main(String[] args){
-		int maxVCount = 30, maxECount = 100; 
-		Graph graph = genTopoGraph(maxVCount);
+		int maxVCount = 30; 
+		double eVRatio = 1.5;
+		Graph graph = genTopoGraph(maxVCount, eVRatio);
 		
 		try {
-			FileWriter fileWriter = new FileWriter("randomTopoGraph.txt");
-			graph.writeMGraph(fileWriter);
-			
-
+			FileWriter fileWriter = new FileWriter("randomAdjTopo.txt");
+			graph.writeAdjGraph(fileWriter);
+			fileWriter.close();
+			fileWriter = new FileWriter("randomMatrixTopo.txt");
+			graph.writeMatrixGraph(fileWriter);
 			fileWriter.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -22,16 +24,19 @@ public class TopoGraphGen {
 		}
 	}
 	
-	public static Graph genTopoGraph(int maxVCount){
+	public static Graph genTopoGraph(int maxVCount, double eVRatio){
 //		if (maxECount < maxVCount - 1) {
 //			throw new IllegalArgumentException("max edge count shall be larger "
 //					+ "or equal than max vertex count plus + 1");
 //		}
+		if (eVRatio < 1) {
+			throw new IllegalArgumentException("edge to vertex ratio too small!");
+		}
 		Random random = new Random();
 		//choose to add 2 since we don't want a graph with only 1 node
 		int vCount = random.nextInt(maxVCount - 2) + 2;
 		//TODO how to leverage maxECount for edge random of specified number
-		int eCount = random.nextInt(vCount * vCount - (vCount - 1) - vCount) + vCount - 1;
+		int eCount = random.nextInt((int)(vCount * eVRatio) - (vCount - 1)) + vCount - 1;
 		int remainingECount = eCount;
 		Graph graph = new Graph(vCount, eCount);
 		double [][] weight = new double[vCount][vCount];

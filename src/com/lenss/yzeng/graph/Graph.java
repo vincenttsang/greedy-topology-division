@@ -82,7 +82,8 @@ public class Graph {
 		}
 	}
 	
-	public  void writeMGraph(FileWriter fileWriter) throws IOException{
+	public  void writeAdjGraph(FileWriter fileWriter) throws IOException{
+		System.out.println("=======================Adjacency Graph=======================");
 		fileWriter.write(this.vCount + " " + this.eCount + "\n");
 		System.out.println(this.vCount + " " + this.eCount);
 		for (int i = 0; i < this.vCount; i++) {
@@ -94,6 +95,22 @@ public class Graph {
 //					System.out.println(i + " " + j + " " + String.format("%.2f", this.weight[i][j]));
 				}
 			}
+		}
+	}
+	
+	public void writeMatrixGraph(FileWriter fileWriter) throws IOException{
+		System.out.println("====================Matrix Graph=======================");
+		fileWriter.write(this.vCount + " " + this.eCount + "\n");
+		System.out.println(this.vCount + " " + this.eCount);
+		//tailored for matlab input, where unconnected edge is weighted 0
+		for (int i = 0; i < this.vCount; i++) {
+			for (int j = 0; j < this.vCount; j++) {
+				double tmpWeight = weight[i][j] == -1 ? 0 : weight[i][j];
+				fileWriter.write(tmpWeight + "\t");
+				System.out.print(tmpWeight + "\t");
+			}
+			fileWriter.write("\n");
+			System.out.print("\n");
 		}
 	}
 	
