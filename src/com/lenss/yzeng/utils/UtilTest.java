@@ -29,6 +29,15 @@ public class UtilTest {
 			linkedList.descendingInsert(newInt);
 		}
 		linkedList.print();
+		
+		System.out.print("\n");
+		System.out.println("=============Random Number Array Fixed Sum===============");
+		int sum = 50, length = 10;
+		System.out.println("Sum = " + sum + "\tLength: " + length);
+		int[] numArray = Utils.randNumFixedSum(length, sum);
+		for (int i : numArray) {
+			System.out.print(i + "\t");
+		}
 	}
 	
 }
