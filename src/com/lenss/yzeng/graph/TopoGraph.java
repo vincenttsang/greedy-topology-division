@@ -47,6 +47,11 @@ public class TopoGraph extends Graph {
 		this.edgeList.descendingInsert(new Edge(v, w, weight));
 	}
 	
+	//the Maximum Spanning Tree Approach
+//	public ArrayList<ArrayList<Integer>> maxSTDivide(int[] deviceCapacity){
+//		
+//	}
+	
 	public ArrayList<ArrayList<Integer>> greedyEdgeDivide(int[] deviceCapacity){
 		ArrayList<ArrayList<Integer>> allocationMap = new ArrayList<ArrayList<Integer>>();
 		ArrayList<Integer> perDevAllocation;
