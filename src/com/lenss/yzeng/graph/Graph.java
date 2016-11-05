@@ -2,6 +2,8 @@ package com.lenss.yzeng.graph;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -78,6 +80,21 @@ public class Graph {
 			}
 			System.out.print("\n");
 		}
+	}
+	
+	public  void writeMGraph(String filePath) throws IOException{
+		FileWriter fileWriter = new FileWriter(filePath);
+		fileWriter.write(this.vCount + " " + this.eCount + "\n");
+		System.out.println(this.vCount + " " + this.eCount);
+		for (int i = 0; i < this.vCount; i++) {
+			for (int j = i + 1; j < this.vCount; j++) {
+				if (this.weight[i][j] > 0) {
+					fileWriter.write(i + " " + j + " " + this.weight[i][j] + "\n");
+					System.out.println(i + " " + j + " " + this.weight[i][j]);
+				}
+			}
+		}
+		fileWriter.close();
 	}
 	
 	public double[][] getWeight() {

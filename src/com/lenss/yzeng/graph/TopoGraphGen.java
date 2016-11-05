@@ -1,21 +1,42 @@
 package com.lenss.yzeng.graph;
 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
 
 public class TopoGraphGen {
 	public static void main(String[] args){
+		int maxVCount = 30, maxECount = 100; 
+		Graph graph = genTopoGraph(maxVCount);
+		
+		try {
+			graph.writeMGraph("randomTopoGraph.txt");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static Graph genTopoGraph(int maxVCount){
+//		if (maxECount < maxVCount - 1) {
+//			throw new IllegalArgumentException("max edge count shall be larger "
+//					+ "or equal than max vertex count plus + 1");
+//		}
 		Random random = new Random();
 		//choose to add 2 since we don't want a graph with only 1 node
-		int vCount = random.nextInt(30) + 2;
-		int eCount = vCount - 1;
+		int vCount = random.nextInt(maxVCount - 2) + 2;
+		//TODO how to leverage maxECount for edge random of specified number
+		int eCount = random.nextInt(vCount * vCount - (vCount - 1) - vCount) + vCount - 1;
+		int remainingECount = eCount;
+		Graph graph = new Graph(vCount, eCount);
 		double [][] weight = new double[vCount][vCount];
 		for (int i = 0; i < vCount; i++) {
 			Arrays.fill(weight[i], -1);
 			weight[i][i] = 0;
 		}
+		
+		//shuffled order of all vertices for the first round random generation
+		//to ensure graph connectivity
 		int order[] = new int[vCount];
 		for (int i = 0; i < order.length; i++) {
 			order[i] = i;
@@ -31,43 +52,34 @@ public class TopoGraphGen {
 			weight[order[index]][order[i]] = tmpWeight;
 			weight[order[i]][order[index]] = tmpWeight;
 		}
+		remainingECount = remainingECount - (vCount - 1);
 		
-		for (int i = 0; i < vCount; i++) {
-			for (int j = 0; j < vCount; j++) {
-				if (j != i) {
-					if (random.nextDouble() > 0.5) {
-						if (weight[i][j] == -1) {
-							eCount ++;
-						}
-						double tmpWeight = 0 + 10 * random.nextDouble();
-						weight[i][j] = tmpWeight;
-						weight[j][i] = tmpWeight;
-					}
-				}
+		//Yet a new random strategy
+		while (remainingECount != 0) {
+			int vIndex = random.nextInt(vCount - 1), wIndex = random.nextInt(vCount - 1);
+			if (weight[vIndex][wIndex] == -1) {
+				double tmpWeight = 0 + 10 * random.nextDouble();
+				weight[vIndex][wIndex] = tmpWeight;
+				weight[wIndex][vIndex] = tmpWeight;
+				remainingECount --;
 			}
 		}
-		
-		try {
-			writeMGraph(weight, vCount, eCount);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	public static void writeMGraph(double[][] weight, int vCount, int eCount) throws IOException{
-		FileWriter fileWriter = new FileWriter("randomTopoGraph.txt");
-		fileWriter.write(vCount + " " + eCount + "\n");
-		System.out.println(vCount + " " + eCount);
-		for (int i = 0; i < vCount; i++) {
-			for (int j = i + 1; j < vCount; j++) {
-				if (weight[i][j] > 0) {
-					fileWriter.write(i + " " + j + " " + weight[i][j] + "\n");
-					System.out.println(i + " " + j + " " + weight[i][j]);
-				}
-			}
-		}
-		fileWriter.close();
+//		for (int i = 0; i < vCount; i++) {
+//			for (int j = 0; j < vCount; j++) {
+//				if (j != i) {
+//					if (random.nextDouble() > 0.5) {
+//						if (weight[i][j] == -1) {
+//							eCount ++;
+//						}
+//						double tmpWeight = 0 + 10 * random.nextDouble();
+//						weight[i][j] = tmpWeight;
+//						weight[j][i] = tmpWeight;
+//					}
+//				}
+//			}
+//		}
+		graph.setWeight(weight);
+		return graph;
 	}
 	
 	public static void shuffleArray(int[] array){
