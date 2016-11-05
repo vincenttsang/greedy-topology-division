@@ -82,8 +82,7 @@ public class Graph {
 		}
 	}
 	
-	public  void writeMGraph(String filePath) throws IOException{
-		FileWriter fileWriter = new FileWriter(filePath);
+	public  void writeMGraph(FileWriter fileWriter) throws IOException{
 		fileWriter.write(this.vCount + " " + this.eCount + "\n");
 		System.out.println(this.vCount + " " + this.eCount);
 		for (int i = 0; i < this.vCount; i++) {
@@ -91,10 +90,11 @@ public class Graph {
 				if (this.weight[i][j] > 0) {
 					fileWriter.write(i + " " + j + " " + this.weight[i][j] + "\n");
 					System.out.println(i + " " + j + " " + this.weight[i][j]);
+//					fileWriter.write(i + " " + j + " " + String.format("%.2f", this.weight[i][j]) + "\n");
+//					System.out.println(i + " " + j + " " + String.format("%.2f", this.weight[i][j]));
 				}
 			}
 		}
-		fileWriter.close();
 	}
 	
 	public double[][] getWeight() {

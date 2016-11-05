@@ -1,5 +1,6 @@
 package com.lenss.yzeng.graph;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
@@ -10,7 +11,11 @@ public class TopoGraphGen {
 		Graph graph = genTopoGraph(maxVCount);
 		
 		try {
-			graph.writeMGraph("randomTopoGraph.txt");
+			FileWriter fileWriter = new FileWriter("randomTopoGraph.txt");
+			graph.writeMGraph(fileWriter);
+			
+
+			fileWriter.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -49,6 +54,8 @@ public class TopoGraphGen {
 			int index = random.nextInt(i);
 			//range from 0 to 10
 			double tmpWeight = 0 + 10 * random.nextDouble();
+			//round the precision
+			tmpWeight = round(tmpWeight, 1);
 			weight[order[index]][order[i]] = tmpWeight;
 			weight[order[i]][order[index]] = tmpWeight;
 		}
@@ -59,6 +66,7 @@ public class TopoGraphGen {
 			int vIndex = random.nextInt(vCount - 1), wIndex = random.nextInt(vCount - 1);
 			if (weight[vIndex][wIndex] == -1) {
 				double tmpWeight = 0 + 10 * random.nextDouble();
+				tmpWeight = round(tmpWeight, 1);
 				weight[vIndex][wIndex] = tmpWeight;
 				weight[wIndex][vIndex] = tmpWeight;
 				remainingECount --;
@@ -92,5 +100,14 @@ public class TopoGraphGen {
 	    	array[index] = array[i];
 	    	array[i] = temp;
 	    }
+	}
+	
+	public static double round(double value, int places) {
+	    if (places < 0) throw new IllegalArgumentException();
+
+	    long factor = (long) Math.pow(10, places);
+	    value = value * factor;
+	    long tmp = Math.round(value);
+	    return (double) tmp / factor;
 	}
 }
