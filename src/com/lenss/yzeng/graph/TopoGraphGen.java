@@ -20,7 +20,7 @@ public class TopoGraphGen {
 			Graph topoGraph = Graph.genTopoGraph(maxVCount, eVRatio);
 			Graph devGraph = Graph.genStrongConnGraph(maxDevCount);
 			//1.25 sets the current total executor number is 1.25 times task number
-			int actualDevCount = devGraph.getvCount(), totalExe = (int)(topoGraph.getvCount() * 1.25);
+			int actualDevCount = devGraph.getvCount(), totalExe = (int)(topoGraph.getvCount() * 2);
 			int[] devExeArray = Utils.randNumFixedSum(actualDevCount, totalExe);
 			
 			try {

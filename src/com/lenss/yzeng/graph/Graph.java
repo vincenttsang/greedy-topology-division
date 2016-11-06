@@ -185,7 +185,11 @@ public class Graph {
 		//ensure the connectivity of the graph
 		for (int i = 1; i < vCount; i++) {
 			//select randomly from vertices before itself in the shuffled vertex array
-			int index = random.nextInt(i);
+			int index;
+			if (i == 1) 
+				index = 0;
+			else
+				index = random.nextInt(i - 1);
 			//range from 0 to 10
 			double tmpWeight = 0 + 10 * random.nextDouble();
 			//round the precision
