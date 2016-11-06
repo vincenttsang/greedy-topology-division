@@ -130,7 +130,7 @@ public class Graph {
 		Random random = new Random(System.currentTimeMillis());
 		//choose to add 2 since we don't want a graph with only 1 node
 		int vCount = random.nextInt(maxVCount - 2) + 2, 
-			eCount = vCount * vCount;
+			eCount = (vCount * vCount - vCount) / 2;
 		Graph graph = new Graph(vCount, eCount);
 		double [][] weight = new double[vCount][vCount];
 		for (int i = 0; i < vCount; i++) {

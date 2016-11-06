@@ -15,36 +15,65 @@ public class TopoGraphGen {
 		//for device graph
 		int maxDevCount = 15;
 		
-		Graph topoGraph = Graph.genTopoGraph(maxVCount, eVRatio);
-		Graph devGraph = Graph.genStrongConnGraph(maxDevCount);
 		
-		int actualDevCount = devGraph.getvCount(), totalExe = (int)(topoGraph.getvCount() * 1.25);
-		int[] devExeArray = Utils.randNumFixedSum(actualDevCount, totalExe);
-		
-		try {
-			FileWriter fileWriter = new FileWriter("randomAdjTopo.txt");
-			topoGraph.writeAdjGraph(fileWriter);
-			fileWriter.close();
+		for (int i = 0; i < 20; i++) {
+			Graph topoGraph = Graph.genTopoGraph(maxVCount, eVRatio);
+			Graph devGraph = Graph.genStrongConnGraph(maxDevCount);
+			//1.25 sets the current total executor number is 1.25 times task number
+			int actualDevCount = devGraph.getvCount(), totalExe = (int)(topoGraph.getvCount() * 1.25);
+			int[] devExeArray = Utils.randNumFixedSum(actualDevCount, totalExe);
 			
-			fileWriter = new FileWriter("randomMatrixTopo.txt");
-			topoGraph.writeMatrixGraph(fileWriter);
-			fileWriter.close();
-			
-			fileWriter = new FileWriter("randomDevAdjGraph.txt");
-			devGraph.writeAdjGraph(fileWriter);
-			fileWriter.close();
-			
-			fileWriter = new FileWriter("randomDevMatrixGraph.txt");
-			devGraph.writeMatrixGraph(fileWriter);
-			fileWriter.close();
-			
-			fileWriter = new FileWriter("randomDevExecutors.txt");
-			writeDevExecutors(devExeArray, fileWriter);
-			fileWriter.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			try {
+				//MATLEB test cases
+				FileWriter fileWriterML = new FileWriter(".\\testcases\\ml-testcase" + i);
+				//Greedy algorithm test cases
+				FileWriter fileWriterG = new FileWriter(".\\testcases\\g-testcase" + i);
+				
+				topoGraph.writeMatrixGraph(fileWriterML);
+				devGraph.writeMatrixGraph(fileWriterML);
+				writeDevExecutors(devExeArray, fileWriterML);
+				
+				topoGraph.writeAdjGraph(fileWriterG);
+				devGraph.writeAdjGraph(fileWriterG);
+				writeDevExecutors(devExeArray, fileWriterG);
+				
+				fileWriterG.close();
+				fileWriterML.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+//		Graph topoGraph = Graph.genTopoGraph(maxVCount, eVRatio);
+//		Graph devGraph = Graph.genStrongConnGraph(maxDevCount);
+//		//1.25 sets the current total executor number is 1.25 times task number
+//		int actualDevCount = devGraph.getvCount(), totalExe = (int)(topoGraph.getvCount() * 1.25);
+//		int[] devExeArray = Utils.randNumFixedSum(actualDevCount, totalExe);
+//		
+//		try {
+//			FileWriter fileWriter = new FileWriter("randomAdjTopo.txt");
+//			topoGraph.writeAdjGraph(fileWriter);
+//			fileWriter.close();
+//			
+//			fileWriter = new FileWriter("randomMatrixTopo.txt");
+//			topoGraph.writeMatrixGraph(fileWriter);
+//			fileWriter.close();
+//			
+//			fileWriter = new FileWriter("randomDevAdjGraph.txt");
+//			devGraph.writeAdjGraph(fileWriter);
+//			fileWriter.close();
+//			
+//			fileWriter = new FileWriter("randomDevMatrixGraph.txt");
+//			devGraph.writeMatrixGraph(fileWriter);
+//			fileWriter.close();
+//			
+//			fileWriter = new FileWriter("randomDevExecutors.txt");
+//			writeDevExecutors(devExeArray, fileWriter);
+//			fileWriter.close();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 	
 	public static void writeDevExecutors(int[] devExeArray, FileWriter fileWriter) throws IOException{
@@ -55,5 +84,6 @@ public class TopoGraphGen {
 			System.out.print(dev + " ");
 			fileWriter.write(dev + " ");
 		}
+		System.out.print("\n");
 	}
 }
