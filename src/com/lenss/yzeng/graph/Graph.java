@@ -133,6 +133,7 @@ public class Graph {
 			eCount = (vCount * vCount - vCount) / 2;
 		Graph graph = new Graph(vCount, eCount);
 		double [][] weight = new double[vCount][vCount];
+		int edgeGen = 0;
 		for (int i = 0; i < vCount; i++) {
 			for (int j = i + 1; j < vCount; j++) {
 				if (i == j) {
@@ -140,14 +141,16 @@ public class Graph {
 				}
 				else {
 					//range from 0 to 10
-					double tmpWeight = 0 + 10 * random.nextDouble();
+					double tmpWeight = 0.1 + 10 * random.nextDouble();
 					//round the precision
 					tmpWeight = Utils.round(tmpWeight, 1);
 					weight[i][j] = tmpWeight;
 					weight[j][i] = tmpWeight;
+					edgeGen ++;
 				}
 			}
 		}
+		System.out.println(edgeGen);
 		graph.setWeight(weight);
 		return graph;
 	}
@@ -191,7 +194,7 @@ public class Graph {
 			else
 				index = random.nextInt(i - 1);
 			//range from 0 to 10
-			double tmpWeight = 0 + 10 * random.nextDouble();
+			double tmpWeight = 0.1 + 10 * random.nextDouble();
 			//round the precision
 			tmpWeight = Utils.round(tmpWeight, 1);
 			weight[order[index]][order[i]] = tmpWeight;
