@@ -2,7 +2,6 @@ package com.lenss.yzeng.graph;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -15,11 +14,11 @@ public class NeuralTopoGraph extends TopoGraph{
 		// TODO Auto-generated constructor stub
 	}
 
-	public static int MAX_LEVEL = 8;
+	public static int MAX_LEVEL = 7;
 	public static int MIN_LEVEL = 3;
 	public static int MAX_COMP_PER_LEVEL = 5;
 	public static int MIN_COMP_PER_LEVEL = 1;
-	public static int MAX_EXE_PER_COMP = 3;
+	public static int MAX_EXE_PER_COMP = 4;
 	public static int MIN_EXE_PER_COMP = 1;
 	
 	public static Graph genNeuralTopoGraph(){
@@ -35,14 +34,14 @@ public class NeuralTopoGraph extends TopoGraph{
 					- MIN_COMP_PER_LEVEL) + MIN_COMP_PER_LEVEL;
 			ArrayList<ArrayList<Integer>> compArray = graphArray.get(i);
 			for (int j = 0; j < compPerLevel; j ++){
-				compArray.add(new ArrayList<Integer>());
 				int exePerComp = random.nextInt(MAX_EXE_PER_COMP 
 						- MIN_EXE_PER_COMP) + MIN_EXE_PER_COMP;
+				ArrayList<Integer> exeArray = new ArrayList<Integer>();
 				for (int k = 0; k < exePerComp; k++) {
-					ArrayList<Integer> exeArray = new ArrayList<Integer>();
 					exeArray.add(exeNum);
 					exeNum ++;
 				}
+				compArray.add(exeArray);
 			}
 		}
 		int eCount = 0;
@@ -101,6 +100,19 @@ public class NeuralTopoGraph extends TopoGraph{
 				nextLevelConn.add(randComp);
 			}
 		}
+		System.out.println("Level Details:");
+		for (int j = 0; j < graphArray.size(); j++) {
+			System.out.print("Level " + j + ": ");
+			ArrayList<ArrayList<Integer>> levelComp = graphArray.get(j);
+			for (int j2 = 0; j2 < levelComp.size(); j2++) {
+				System.out.print("Component " + j2 + ": ");
+				ArrayList<Integer> compExe = levelComp.get(j2);
+				for (int k = 0; k < compExe.size(); k++) {
+					System.out.print(compExe.get(k) + " ");
+				}
+			}
+			System.out.print("\n");
+		}
 		Graph graph = new Graph(exeNum, eCount);
 		graph.setWeight(weight);
 		return graph;
@@ -112,6 +124,7 @@ public class NeuralTopoGraph extends TopoGraph{
 		try {
 			fileWriter = new FileWriter(".\\testcases\\neural_test");
 			graph.writeAdjGraph(fileWriter);
+			fileWriter.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
