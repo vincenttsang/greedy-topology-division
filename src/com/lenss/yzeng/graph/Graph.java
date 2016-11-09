@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.IllegalFormatCodePointException;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -128,10 +129,14 @@ public class Graph {
 	}
 	
 	
-	public static Graph genStrongConnGraph(int maxVCount){
+	public static Graph genStrongConnGraph(int minVCount, int maxVCount){
+		if (minVCount >= maxVCount) {
+			System.out.println("genStrongConnGraph(Device Net Graph): min vertex count less than max vertex count!");
+			return null;
+		}
 		Random random = new Random(System.currentTimeMillis());
 		//choose to add 2 since we don't want a graph with only 1 node
-		int vCount = random.nextInt(maxVCount - 2) + 2, 
+		int vCount = random.nextInt(maxVCount - minVCount) + minVCount, 
 			eCount = (vCount * vCount - vCount) / 2;
 		Graph graph = new Graph(vCount, eCount);
 		double [][] weight = new double[vCount][vCount];

@@ -148,11 +148,12 @@ public class NeuralTopoGraph extends TopoGraph{
 	}
 	
 	public static void main(String[] args){
-		int maxDevCount = 15;
+		//the minimum cluster device and maximum we want to randomly gen
+		int maxDevCount = 15, minDevcount = 4;
 		for (int i = 0; i < 20; i++) {
 			System.out.println("==================Round " + i);
 			Graph neuralTopoGraph = NeuralTopoGraph.genNeuralTopoGraph();
-			Graph devGraph = Graph.genStrongConnGraph(maxDevCount);
+			Graph devGraph = Graph.genStrongConnGraph(minDevcount, maxDevCount);
 			//1.25 sets the current total executor number is 1.25 times task number
 			int actualDevCount = devGraph.getvCount(), totalExe = (int)(neuralTopoGraph.getvCount() * 2);
 			int[] devExeArray = Utils.randNumFixedSum(actualDevCount, totalExe);
