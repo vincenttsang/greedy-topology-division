@@ -3,10 +3,9 @@ package com.lenss.yzeng.graph;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
-
-import javax.rmi.CORBA.Util;
 
 import com.lenss.yzeng.utils.Utils;
 
@@ -16,12 +15,18 @@ public class NeuralTopoGraph extends TopoGraph{
 		// TODO Auto-generated constructor stub
 	}
 
-	public static int MAX_LEVEL = 7;
+	public static int MAX_LEVEL = 6;
 	public static int MIN_LEVEL = 3;
 	public static int MAX_COMP_PER_LEVEL = 5;
-	public static int MIN_COMP_PER_LEVEL = 1;
-	public static int MAX_EXE_PER_COMP = 4;
+	public static int MIN_COMP_PER_LEVEL = 2;
+	public static int MAX_EXE_PER_COMP = 3;
 	public static int MIN_EXE_PER_COMP = 1;
+//	public static int MAX_LEVEL = 3;
+//	public static int MIN_LEVEL = 2;
+//	public static int MAX_COMP_PER_LEVEL = 3;
+//	public static int MIN_COMP_PER_LEVEL = 1;
+//	public static int MAX_EXE_PER_COMP = 3;
+//	public static int MIN_EXE_PER_COMP = 1;
 	
 	public static Graph genNeuralTopoGraph(){
 		Random random = new Random(System.currentTimeMillis());
@@ -48,6 +53,10 @@ public class NeuralTopoGraph extends TopoGraph{
 		}
 		int eCount = 0;
 		double[][] weight = new double[exeNum + 1][exeNum + 1];
+		for (int i = 0; i < exeNum + 1; i++) {
+			Arrays.fill(weight[i], -1);
+			weight[i][i] = 0;
+		}
 		ArrayList<Integer> nextLevelConn = new ArrayList<Integer>();
 		for (ArrayList<ArrayList<Integer>> currentLevelComp : graphArray) {
 			int i = graphArray.indexOf(currentLevelComp);
@@ -60,7 +69,7 @@ public class NeuralTopoGraph extends TopoGraph{
 						int last = i - 1;
 						ArrayList<ArrayList<Integer>> lastLevelComp = graphArray.get(last);
 						
-						if (!nextLevelConn.contains(currentLevelComp.get(j))) {
+						if (!nextLevelConn.contains(j)) {
 							int randLastComp = lastLevelComp.size() == 1 ? 0 : random.nextInt(lastLevelComp.size() - 1);
 							ArrayList<Integer> curPerCompExe = currentLevelComp.get(j);
 							ArrayList<Integer> lastPerCompExe = lastLevelComp.get(randLastComp);
@@ -70,6 +79,11 @@ public class NeuralTopoGraph extends TopoGraph{
 									double tmpWeight = 0.1 + 10 * random.nextDouble();
 									//round the precision
 									tmpWeight = Utils.round(tmpWeight, 1);
+									if (weight[curIndex][lastIndex] != -1) {
+										System.out.println("Last Level: " + last);
+										System.out.println("Last level Index: " + lastIndex);
+										System.out.println("Cur level Index: " + curIndex);
+									}
 									weight[curIndex][lastIndex] = tmpWeight;
 									weight[lastIndex][curIndex] = tmpWeight;
 									eCount ++;
@@ -85,47 +99,60 @@ public class NeuralTopoGraph extends TopoGraph{
 				break;
 			}
 			ArrayList<ArrayList<Integer>> nextLevelComp = graphArray.get(i + 1);
-			for (ArrayList<Integer> component : currentLevelComp) {
+			//iterate all the component in current level
+			for (int j = 0; j < currentLevelComp.size(); j++) {
+				//get a random component in the next level
 				int randComp = nextLevelComp.size() == 1 ? 0 : random.nextInt(nextLevelComp.size() - 1);
-				for (Integer vIndex : component) {
-					ArrayList<Integer> exeInRandCom = nextLevelComp.get(randComp);
-					for (Integer nextVIndex : exeInRandCom) {
+				ArrayList<Integer> exeInRandCom = nextLevelComp.get(randComp);
+				ArrayList<Integer> exeInCurComp = currentLevelComp.get(j);
+				for (int k = 0; k < exeInCurComp.size(); k++) {
+					for (int k2 = 0; k2 < exeInRandCom.size(); k2++) {
 						//range from 0 to 10
 						double tmpWeight = 0.1 + 10 * random.nextDouble();
 						//round the precision
 						tmpWeight = Utils.round(tmpWeight, 1);
-						weight[vIndex][nextVIndex] = tmpWeight;
-						weight[nextVIndex][vIndex] = tmpWeight;
+						
+						int randNextIndex = exeInRandCom.get(k2), curIndex = exeInCurComp.get(k);
+						
+						if (weight[randNextIndex][curIndex] != -1) {
+							System.out.println("Next Level: " + (i + 1));
+							System.out.println("Next level Index: " + randNextIndex);
+							System.out.println("Cur level Index: " + curIndex);
+						}
+						weight[curIndex][randNextIndex] = tmpWeight;
+						weight[randNextIndex][curIndex] = tmpWeight;
 						eCount ++;
 					}
 				}
-				nextLevelConn.add(randComp);
-			}
-		}
-		System.out.println("Level Details:");
-		for (int j = 0; j < graphArray.size(); j++) {
-			System.out.print("Level " + j + ": ");
-			ArrayList<ArrayList<Integer>> levelComp = graphArray.get(j);
-			for (int j2 = 0; j2 < levelComp.size(); j2++) {
-				System.out.print("Component " + j2 + ": ");
-				ArrayList<Integer> compExe = levelComp.get(j2);
-				for (int k = 0; k < compExe.size(); k++) {
-					System.out.print(compExe.get(k) + " ");
+				if (!nextLevelConn.contains(randComp)) {
+					nextLevelConn.add(randComp);
 				}
 			}
-			System.out.print("\n");
 		}
-		Graph graph = new Graph(exeNum, eCount);
+//		System.out.println("Level Details:");
+//		for (int j = 0; j < graphArray.size(); j++) {
+//			System.out.print("Level " + j + ": ");
+//			ArrayList<ArrayList<Integer>> levelComp = graphArray.get(j);
+//			for (int j2 = 0; j2 < levelComp.size(); j2++) {
+//				System.out.print("Component " + j2 + ": ");
+//				ArrayList<Integer> compExe = levelComp.get(j2);
+//				for (int k = 0; k < compExe.size(); k++) {
+//					System.out.print(compExe.get(k) + " ");
+//				}
+//			}
+//			System.out.print("\n");
+//		}
+		Graph graph = new Graph(exeNum + 1, eCount);
 		graph.setWeight(weight);
 		return graph;
 	}
 	
 	public static void main(String[] args){
-		Graph neuralTopoGraph = NeuralTopoGraph.genNeuralTopoGraph();
-
 		int maxDevCount = 15;
-		Graph devGraph = Graph.genStrongConnGraph(maxDevCount);
 		for (int i = 0; i < 20; i++) {
+			System.out.println("==================Round " + i);
+			Graph neuralTopoGraph = NeuralTopoGraph.genNeuralTopoGraph();
+			Graph devGraph = Graph.genStrongConnGraph(maxDevCount);
 			//1.25 sets the current total executor number is 1.25 times task number
 			int actualDevCount = devGraph.getvCount(), totalExe = (int)(neuralTopoGraph.getvCount() * 2);
 			int[] devExeArray = Utils.randNumFixedSum(actualDevCount, totalExe);
