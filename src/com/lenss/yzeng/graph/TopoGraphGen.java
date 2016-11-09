@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
 
+import javax.rmi.CORBA.Util;
+
 import com.lenss.yzeng.utils.Utils;
 
 public class TopoGraphGen {
@@ -31,11 +33,11 @@ public class TopoGraphGen {
 				
 				topoGraph.writeMatrixGraph(fileWriterML);
 				devGraph.writeMatrixGraph(fileWriterML);
-				writeDevExecutors(devExeArray, fileWriterML);
+				Utils.writeDevExecutors(devExeArray, fileWriterML);
 				
 				topoGraph.writeAdjGraph(fileWriterG);
 				devGraph.writeAdjGraph(fileWriterG);
-				writeDevExecutors(devExeArray, fileWriterG);
+				Utils.writeDevExecutors(devExeArray, fileWriterG);
 				
 				fileWriterG.close();
 				fileWriterML.close();
@@ -76,14 +78,5 @@ public class TopoGraphGen {
 //		}
 	}
 	
-	public static void writeDevExecutors(int[] devExeArray, FileWriter fileWriter) throws IOException{
-		System.out.println("===============Writing Dev Executors=============");
-		System.out.println(devExeArray.length);
-		fileWriter.write(devExeArray.length + "\n");
-		for (int dev : devExeArray) {
-			System.out.print(dev + " ");
-			fileWriter.write(dev + " ");
-		}
-		System.out.print("\n");
-	}
+	
 }

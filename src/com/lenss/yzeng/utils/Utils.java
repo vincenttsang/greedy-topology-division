@@ -1,5 +1,7 @@
 package com.lenss.yzeng.utils;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -39,5 +41,16 @@ public class Utils {
 	    value = value * factor;
 	    long tmp = Math.round(value);
 	    return (double) tmp / factor;
+	}
+	
+	public static void writeDevExecutors(int[] devExeArray, FileWriter fileWriter) throws IOException{
+		System.out.println("===============Writing Dev Executors=============");
+		System.out.println(devExeArray.length);
+		fileWriter.write(devExeArray.length + "\n");
+		for (int dev : devExeArray) {
+			System.out.print(dev + " ");
+			fileWriter.write(dev + " ");
+		}
+		System.out.print("\n");
 	}
 }

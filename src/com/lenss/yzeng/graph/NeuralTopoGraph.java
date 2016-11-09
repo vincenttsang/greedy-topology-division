@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
+import javax.rmi.CORBA.Util;
+
 import com.lenss.yzeng.utils.Utils;
 
 public class NeuralTopoGraph extends TopoGraph{
@@ -119,15 +121,35 @@ public class NeuralTopoGraph extends TopoGraph{
 	}
 	
 	public static void main(String[] args){
-		Graph graph = NeuralTopoGraph.genNeuralTopoGraph();
-		FileWriter fileWriter;
-		try {
-			fileWriter = new FileWriter(".\\testcases\\neural_test");
-			graph.writeAdjGraph(fileWriter);
-			fileWriter.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		Graph neuralTopoGraph = NeuralTopoGraph.genNeuralTopoGraph();
+
+		int maxDevCount = 15;
+		Graph devGraph = Graph.genStrongConnGraph(maxDevCount);
+		for (int i = 0; i < 20; i++) {
+			//1.25 sets the current total executor number is 1.25 times task number
+			int actualDevCount = devGraph.getvCount(), totalExe = (int)(neuralTopoGraph.getvCount() * 2);
+			int[] devExeArray = Utils.randNumFixedSum(actualDevCount, totalExe);
+			
+			try {
+				//MATLEB test cases
+				FileWriter fileWriterML = new FileWriter(".\\testcases\\ml-testcase" + i);
+				//Greedy algorithm test cases
+				FileWriter fileWriterG = new FileWriter(".\\testcases\\g-testcase" + i);
+				
+				neuralTopoGraph.writeMatrixGraph(fileWriterML);
+				devGraph.writeMatrixGraph(fileWriterML);
+				Utils.writeDevExecutors(devExeArray, fileWriterML);
+				
+				neuralTopoGraph.writeAdjGraph(fileWriterG);
+				devGraph.writeAdjGraph(fileWriterG);
+				Utils.writeDevExecutors(devExeArray, fileWriterG);
+				
+				fileWriterG.close();
+				fileWriterML.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 }
