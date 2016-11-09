@@ -2,7 +2,6 @@ package com.lenss.yzeng;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import com.lenss.yzeng.graph.Graph;
 import com.lenss.yzeng.graph.TopoGraph;
 
 public class GreedyDivider {

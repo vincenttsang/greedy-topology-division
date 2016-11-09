@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class Graph {
 	protected final int vCount;
-	protected final int eCount;
+	protected int eCount;
 	
 	protected double weight[][];
 
@@ -33,6 +33,8 @@ public class Graph {
 		
 		initWeight(scanner);
 	}
+	
+	
 	
 	public void initWeight(Scanner scanner){
 		int v = scanner.nextInt();
