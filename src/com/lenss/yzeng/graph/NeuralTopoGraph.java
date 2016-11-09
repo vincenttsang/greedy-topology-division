@@ -76,7 +76,7 @@ public class NeuralTopoGraph extends TopoGraph{
 							for (Integer lastIndex : lastPerCompExe) {
 								for (Integer curIndex : curPerCompExe) {
 									//range from 0 to 10
-									double tmpWeight = 0.1 + 10 * random.nextDouble();
+									double tmpWeight = 1.0 + 10 * random.nextDouble();
 									//round the precision
 									tmpWeight = Utils.round(tmpWeight, 1);
 									if (weight[curIndex][lastIndex] != -1) {
@@ -108,7 +108,7 @@ public class NeuralTopoGraph extends TopoGraph{
 				for (int k = 0; k < exeInCurComp.size(); k++) {
 					for (int k2 = 0; k2 < exeInRandCom.size(); k2++) {
 						//range from 0 to 10
-						double tmpWeight = 0.1 + 10 * random.nextDouble();
+						double tmpWeight = 1.0 + 10 * random.nextDouble();
 						//round the precision
 						tmpWeight = Utils.round(tmpWeight, 1);
 						

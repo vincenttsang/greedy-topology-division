@@ -143,7 +143,7 @@ public class Graph {
 				}
 				else {
 					//range from 0 to 10
-					double tmpWeight = 0.1 + 10 * random.nextDouble();
+					double tmpWeight = 1.0 + 10 * random.nextDouble();
 					//round the precision
 					tmpWeight = Utils.round(tmpWeight, 1);
 					weight[i][j] = tmpWeight;
@@ -196,7 +196,7 @@ public class Graph {
 			else
 				index = random.nextInt(i - 1);
 			//range from 0 to 10
-			double tmpWeight = 0.1 + 10 * random.nextDouble();
+			double tmpWeight = 1.0 + 10 * random.nextDouble();
 			//round the precision
 			tmpWeight = Utils.round(tmpWeight, 1);
 			weight[order[index]][order[i]] = tmpWeight;
@@ -208,7 +208,7 @@ public class Graph {
 		while (remainingECount != 0) {
 			int vIndex = random.nextInt(vCount - 1), wIndex = random.nextInt(vCount - 1);
 			if (weight[vIndex][wIndex] == -1) {
-				double tmpWeight = 0 + 10 * random.nextDouble();
+				double tmpWeight = 1.0 + 10 * random.nextDouble();
 				tmpWeight = Utils.round(tmpWeight, 1);
 				weight[vIndex][wIndex] = tmpWeight;
 				weight[wIndex][vIndex] = tmpWeight;
