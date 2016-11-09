@@ -52,8 +52,8 @@ public class NeuralTopoGraph extends TopoGraph{
 			}
 		}
 		int eCount = 0;
-		double[][] weight = new double[exeNum + 1][exeNum + 1];
-		for (int i = 0; i < exeNum + 1; i++) {
+		double[][] weight = new double[exeNum][exeNum];
+		for (int i = 0; i < exeNum; i++) {
 			Arrays.fill(weight[i], -1);
 			weight[i][i] = 0;
 		}
@@ -142,7 +142,7 @@ public class NeuralTopoGraph extends TopoGraph{
 //			}
 //			System.out.print("\n");
 //		}
-		Graph graph = new Graph(exeNum + 1, eCount);
+		Graph graph = new Graph(exeNum, eCount);
 		graph.setWeight(weight);
 		return graph;
 	}
