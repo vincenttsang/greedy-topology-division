@@ -164,7 +164,7 @@ public class NeuralTopoGraph extends TopoGraph{
 				//Greedy algorithm test cases
 				FileWriter fileWriterG = new FileWriter(".\\testcases\\g-testcase" + i);
 				
-				neuralTopoGraph.writeMatrixGraph(fileWriterML);
+				neuralTopoGraph.writeHalfMatrixGraph(fileWriterML);
 				devGraph.writeMatrixGraph(fileWriterML);
 				Utils.writeDevExecutors(devExeArray, fileWriterML);
 				

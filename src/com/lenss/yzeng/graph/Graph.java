@@ -112,6 +112,24 @@ public class Graph {
 		}
 	}
 	
+	public void writeHalfMatrixGraph(FileWriter fileWriter) throws IOException {
+		System.out.println("====================Half Matrix Graph=======================");
+		fileWriter.write(this.vCount + " " + this.eCount + "\n");
+		System.out.println(this.vCount + " " + this.eCount);
+		for (int i = 0; i < this.vCount; i++) {
+			for (int j = 0; j < this.vCount; j++) {
+				double tmpWeight = 0.0;
+				if (j > i) {
+					tmpWeight = weight[i][j] == -1 ? 0 : weight[i][j];
+				}
+				fileWriter.write(tmpWeight + "\t");
+				System.out.print(tmpWeight + "\t");
+			}
+			fileWriter.write("\n");
+			System.out.print("\n");
+		}
+	}
+	
 	public double[][] getWeight() {
 		return weight;
 	}
